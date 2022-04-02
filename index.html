@@ -1,6 +1,493 @@
 <!DOCTYPE html>
 <html>
+<head>
+<meta name="viewport" content="initial-scale=1.0">
+<title>Picker</title>
+<style>
+body {
+    background:#FFF;
+    color:#000;
+    font-family:verdana, sans-serif;
+    font-size:10pt;
+    margin:0;
+    padding:10px;
+}
+
+a:link, a:visited {
+    color:#008;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+a:active, a:hover {
+    color:#ACF;
+}
+
+.info {
+    font-weight:bold;
+}
+
+button {
+    font-family:inherit;
+    cursor:pointer;
+    border:0;
+    border-radius:3px;
+    padding:0.3em 0.5em;
+    background:#CCC;
+    color:#000;
+}
+
+button:hover {
+    background:#DDD;
+}
+
+button.disabled {
+    background:#DDD;
+    color:#888;
+    cursor:not-allowed;
+}
+
+button.disabled:hover {
+    background:#DDD;
+}
+
+#container {
+    position:relative;
+    margin-left:-10px;
+    margin-right:-10px;
+    padding:10px;
+    overflow:hidden;
+}
+
+@media (min-width:1024px) {
+    /* Put the found favorites beside the picking div when the window is sufficiently large */
+    #picking {
+        float:left;
+        width:636px;
+    }
+
+    #secondary {
+        margin-left:646px;
+    }
+}
+
+@media (min-width:1300px) {
+    /* Once we get to the point where 636px is less than half of the width of the screen, make the picking div just take up half */
+    #picking {
+        width:50%;
+    }
+
+    #secondary {
+        margin-left:51%;
+    }
+}
+
+#pick {
+    background:#58F;
+    color:#FFF;
+    font-size:larger;
+    font-weight:bold;
+    width:6em;
+    border-radius:5px;
+    margin-right:10px;
+}
+
+#pick.disabled {
+    background:#ACF;
+}
+
+#pick:hover {
+    background:#ACF;
+}
+
+.item-list {
+    padding:0;
+    list-style-type:none;
+    line-height:100px;
+}
+
+.item-list li {
+    margin:0;
+    display:inline-block;
+    height:100px;
+    width:100px;
+    line-height:100px;
+    border:3px solid transparent;
+    text-align:center;
+    position:relative;
+    vertical-align:top;
+    overflow:hidden;
+    border-radius:100%;
+    background:#F7F7F7;
+    color:#000;
+}
+
+.item-list li img {
+    vertical-align:middle;
+    max-height:100%;
+    max-width:100%;
+}
+
+.item-list li span {
+    display:inline-block;
+    vertical-align:middle;
+    line-height:1.2;
+}
+
+@media (max-width:636px) {
+    .item-list {
+        line-height:75px;
+    }
+
+    .item-list li {
+        line-height:75px;
+        height:75px;
+        width:75px;
+    }
+}
+
+@media (max-width:423px) {
+    .item-list {
+        line-height:50px;
+    }
+
+    .item-list li {
+        line-height:50px;
+        height:50px;
+        width:50px;
+    }
+}
+
+#evaluating li {
+    cursor:pointer;
+}
+
+#favorites li {
+    cursor:move;
+}
+
+.item-list li:hover {
+    background:#CDF;
+}
+
+.item-list.sorting li:hover {
+    background:#F7F7F7;
+}
+
+#evaluating li.selected {
+    border:3px solid #7AC;
+}
+
+#evaluating, #buttons {
+    text-align:center;
+    margin:auto;
+}
+
+#evaluating li.notice {
+    width:auto;
+    height:auto;
+    max-width:260px;
+    margin:auto;
+    background:#F7F7F7;
+    border-radius:10px;
+    padding:30px 30px;
+    color:#000;
+    text-align:center;
+    line-height:1.4;
+    cursor:auto;
+    font-size:10pt;
+}
+
+#buttons {
+    margin-top:30px;
+    position:relative;
+    z-index:3;
+}
+</style>
+</head>
 <body>
-  <p>index</p>
+<h1>Monster Hunter Favorite Picker</h1>
+
+<p>Find out who your top favorite monsters in the Monster Hunter franchise are! Mainline series games only. Pick as many as you want from each set of monsters.
+Source code from https://github.com/antialiasis/favorite-picker</p>
+
+<div id="container">
+
+<div id="picking">
+<ul id="evaluating" class="item-list">
+</ul>
+
+<p id="buttons"><button id="pick">Pick</button> <button id="pass">Pass</button> <button id="undo">Undo</button> <button id="redo">Redo</button></p>
+</div>
+
+<div id="secondary">
+<h2>Found favorites</h2>
+
+<ol id="favorites" class="item-list">
+</ol>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="picker.js"></script>
+<script src="picker-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.7.0/Sortable.min.js"></script>
+<script>
+'use strict';
+
+var items = [
+  //bird wyverns
+    {id: 'velocidrome', name: 'Velocidrome', image: 'images/MH/Bird/MH4U-Velocidrome_Icon.png'},
+    {id: 'gendrome', name: 'Gendrome', image: 'images/MH/Bird/MH4U-Gendrome_Icon.png'},
+    {id: 'iodrome', name: 'Iodrome', image: 'images/MH/Bird/MH4U-Iodrome_Icon.png'},
+    {id: 'giadrome', name: 'Giadrome', image: 'images/MH/Bird/MHFU-Giadrome_Icon.png'},
+    {id: 'yiankutku', name: 'Yian Kut-Ku', image: 'images/MH/Bird/MH4U-Yian_Kut-Ku_Icon.png'},
+    {id: 'blyiankutku', name: 'Blue Yian Kut-Ku', image: 'images/MH/Bird/MH4U-Blue_Yian_Kut-Ku_Icon.png'},
+    {id: 'yiangaruga', name: 'Yian Garuga', image: 'images/MH/Bird/MHWI-Yian_Garuga_Icon.png'},
+    {id: 'scaryiangaruga', name: 'Scarred Yian Garuga', image: 'images/MH/Bird/MHWI-Scarred_Yian_Garuga_Icon.png'},
+    {id: 'deadyiangaruga', name: 'Deadeye Yian Garuga', image: 'images/MH/Bird/MHGen-Deadeye_Yian_Garuga_Icon.png'},
+    {id: 'gypceros', name: 'Gypceros', image: 'images/MH/Bird/MH4U-Gypceros_Icon.png'},
+    {id: 'purpgypceros', name: 'Purple Gypceros', image: 'images/MH/Bird/MH4U-Purple_Gypceros_Icon.png'},
+    {id: 'hypnocatrice', name: 'Hypnocatrice', image: 'images/MH/Bird/Hypnocatrice_Icon.png'},
+    {id: 'jaggi', name: 'Great Jaggi', image: 'images/MH/Bird/MH3U-Great_Jaggi_Icon.png'},
+    {id: 'baggi', name: 'Great Baggi', image: 'images/MH/Bird/MH3U-Great_Baggi_Icon.png'},
+    {id: 'wroggi', name: 'Great Wroggi', image: 'images/MH/Bird/MH3U-Great_Wroggi_Icon.png'},
+    {id: 'maccao', name: 'Great Maccao', image: 'images/MH/Bird/MHGen-Great_Maccao_Icon.png'},
+    {id: 'izuchi', name: 'Great Izuchi', image: 'images/MH/Bird/MHRise-Great_Izuchi_Icon.png'},
+    {id: 'qurupeco', name: 'Qurupeco', image: 'images/MH/Bird/MH3U-Qurupeco_Icon.png'},
+    {id: 'crimsonqurupeco', name: 'Crimson Qurupeco', image: 'images/MH/Bird/MHP3-Crimson_Qurupeco_Icon.png'},
+    {id: 'malfestio', name: 'Malfestio', image: 'images/MH/Bird/MHGen-Malfestio_Icon.png'},
+    {id: 'nightmalfest', name: 'Nightcloak Malfestio', image: 'images/MH/Bird/MHGU-Nightcloak_Malfestio_Icon.png'},
+    {id: 'kulu', name: 'Kulu-Ya-Ku', image: 'images/MH/Bird/MHW-Kulu-Ya-Ku_Icon.png'},
+    {id: 'tzitzi', name: 'Tzitzi-Ya-Ku', image: 'images/MH/Bird/MHW-Tzitzi-Ya-Ku_Icon.png'},
+    {id: 'pukei', name: 'Pukei-Pukei', image: 'images/MH/Bird/MHW-Pukei-Pukei_Icon.png'},
+    {id: 'coralpukei', name: 'Coral Pukei-Pukei', image: 'images/MH/Bird/MHWI-Coral_Pukei-Pukei_Icon.png'},
+    {id: 'aknosom', name: 'Aknosom', image: 'images/MH/Bird/MHRise-Aknosom_Icon.png'},
+  //fanged  wyverns
+    {id: 'jagras', name: 'Great Jagras', image: 'images/MH/Fanged Wyvern/MHW-Great_Jagras_Icon.png'},
+    {id: 'girros', name: 'Great Girros', image: 'images/MH/Fanged Wyvern/MHW-Great_Girros_Icon.png'},
+    {id: 'dodo', name: 'Dodogama', image: 'images/MH/Fanged Wyvern/MHW-Dodogama_Icon.png'},
+    {id: 'tobi', name: 'Tobi-Kadachi', image: 'images/MH/Fanged Wyvern/MHW-Tobi-Kadachi_Icon.png'},
+    {id: 'vipertobi', name: 'Viper Tobi-Kadachi', image: 'images/MH/Fanged Wyvern/MHWI-Viper_Tobi-Kadachi_Icon.png'},
+    {id: 'odogaron', name: 'Odogaron', image: 'images/MH/Fanged Wyvern/MHW-Odogaron_Icon.png'},
+    {id: 'ebonyodo', name: 'Ebony Odogaron', image: 'images/MH/Fanged Wyvern/MHWI-Ebony_Odogaron_Icon.png'},
+    {id: 'magnamalo', name: 'Magnamalo', image: 'images/MH/Fanged Wyvern/MHRise-Magnamalo_Icon.png'},
+    {id: 'zinogre', name: 'Zinogre', image: 'images/MH/Fanged Wyvern/MHWI-Zinogre_Icon.png'},
+    {id: 'stygzinogre', name: 'Stygian Zinogre', image: 'images/MH/Fanged Wyvern/MHWI-Stygian_Zinogre_Icon.png'},
+    {id: 'tlordzinogre', name: 'Thunderlord Zinogre', image: 'images/MH/Fanged Wyvern/MHST2-Thunderlord_Zinogre_Icon.png'},
+  //fanged beasts
+    {id: 'bulldrome', name: 'Bulldrome', image: 'images/MH/Fanged Beast/MHST2-Bulldrome_Icon.png'},
+    {id: 'blangonga', name: 'Blangonga', image: 'images/MH/Fanged Beast/Blangonga_Icon.png'},
+    {id: 'copperblangonga', name: 'Copper Blangonga', image: 'images/MH/Fanged Beast/FUIOS-Copper_Blangonga_Icon.png'},
+    {id: 'congalala', name: 'Congalala', image: 'images/MH/Fanged Beast/MHST2-Congalala_Icon.png'},
+    {id: 'emeraldconga', name: 'Emerald Congalala', image: 'images/MH/Fanged Beast/MHST2-Emerald_Congalala_Icon.png'},
+    {id: 'rajang', name: 'Rajang', image: 'images/MH/Fanged Beast/MHWI-Rajang_Icon.png'},
+    {id: 'furiousrajang', name: 'Furious Rajang', image: 'images/MH/Fanged Beast/MHWI-Furious_Rajang_Icon.png'},
+    {id: 'arzuros', name: 'Arzuros', image: 'images/MH/Fanged Beast/MH3U-Arzuros_Icon.png'},
+    {id: 'redarzuros', name: 'Redhelm Arzuros', image: 'images/MH/Fanged Beast/MHGen-Redhelm_Arzuros_Icon.png'},
+    {id: 'lagombi', name: 'Lagombi', image: 'images/MH/Fanged Beast/MHST2-Lagombi_Icon.png'},
+    {id: 'snowlagombi', name: 'Snowbaron Lagombi', image: 'images/MH/Fanged Beast/MHGen-Snowbaron_Lagombi_Icon.png'},
+    {id: 'volvidon', name: 'Volvidon', image: 'images/MH/Fanged Beast/MH3U-Volvidon_Icon.png'},
+    {id: 'kechawacha', name: 'Kecha Wacha', image: 'images/MH/Fanged Beast/MHST2-Kecha_Wacha_Icon.png'},
+    {id: 'ashkechawacha', name: 'Ash Kecha Wacha', image: 'images/MH/Fanged Beast/MHST2-Ash_Kecha_Wacha_Icon.png'},
+    {id: 'gammoth', name: 'Gammoth', image: 'images/MH/Fanged Beast/MHST2-Gammoth_Icon.png'},
+    {id: 'eldergammoth', name: 'Elderfrost Gammoth', image: 'images/MH/Fanged Beast/MHST2-Elderfrost_Gammoth_Icon.png'},
+    {id: 'bishaten', name: 'Bishaten', image: 'images/MH/Fanged Beast/MHRise-Bishaten_Icon.png'},
+    {id: 'goss', name: 'Goss Harag', image: 'images/MH/Fanged Beast/MHRise-Goss_Harag_Icon.png'},
+  //amphibians
+    {id: 'tetsu', name: 'Tetsucabra', image: 'images/MH/Amphibian/MH4U-Tetsucabra_Icon.png'},
+    {id: 'berzerktetsu', name: 'Berzerk Tetsucabra', image: 'images/MH/Amphibian/MH10th-Berserk_Tetsucabra_Icon.png'},
+    {id: 'drilltetsu', name: 'Drilltusk Tetsucabra', image: 'images/MH/Amphibian/MHGen-Drilltusk_Tetsucabra_Icon.png'},
+    {id: 'zamtrios', name: 'Zamtrios', image: 'images/MH/Amphibian/MH4U-Zamtrios_Icon.png'},
+    {id: 'tigerzamtrios', name: 'Tigerstripe Zamtrios', image: 'images/MH/Amphibian/MH4U-Tigerstripe_Zamtrios_Icon.png'},
+    {id: 'tetranadon', name: 'Tetranadon', image: 'images/MH/Amphibian/MHRise-Tetranadon_Icon.png'},
+  //brute wyverns
+    {id: 'barroth', name: 'Barroth', image: 'images/MH/Brute/MH3U-Barroth_Icon.png'},
+    {id: 'jadebarroth', name: 'Jade Barroth', image: 'images/MH/Brute/MH3U-Jade_Barroth_Icon.png'},
+    {id: 'uragaan', name: 'Uragaan', image: 'images/MH/Brute/MHW-Uragaan_Icon.png'},
+    {id: 'steeluragaan', name: 'Steel Uragaan', image: 'images/MH/Brute/MH3U-Steel_Uragaan_Icon.png'},
+    {id: 'crysturagaan', name: 'Crystalbeard Uragaan', image: 'images/MH/Brute/MHGen-Crystalbeard_Uragaan_Icon.png'},
+    {id: 'duram', name: 'Duramboros', image: 'images/MH/Brute/MH3U-Duramboros_Icon.png'},
+    {id: 'rustduram', name: 'Rust Duramboros', image: 'images/MH/Brute/MH3U-Rust_Duramboros_Icon.png'},
+    {id: 'brachy', name: 'Brachydios', image: 'images/MH/Brute/MH3U-Brachydios_Icon.png'},
+    {id: 'ragingbrachy', name: 'Raging Brachydios', image: 'images/MH/Brute/MHWI-Raging_Brachydios_Icon.png'},
+    {id: 'deviljho', name: 'Deviljho', image: 'images/MH/Brute/MHW-Deviljho_Icon.png'},
+    {id: 'savagedeviljho', name: 'Savage Deviljho', image: 'images/MH/Brute/MHWI-Savage_Deviljho_Icon.png'},
+    {id: 'glavenus', name: 'Glavenus', image: 'images/MH/Brute/MHWI-Glavenus_Icon.png'},
+    {id: 'acidicglavenus', name: 'Acidic Glavenus', image: 'images/MH/Brute/MHWI-Acidic_Glavenus_Icon.png'},
+    {id: 'hellglavenus', name: 'Hellblade Glavenus', image: 'images/MH/Brute/MHGen-Hellblade_Glavenus_Icon.png'},
+    {id: 'anjanath', name: 'Anjanath', image: 'images/MH/Brute/MHW-Anjanath_Icon.png'},
+    {id: 'fulguranjanath', name: 'Fulgur Anjanath', image: 'images/MH/Brute/MHWI-Fulgur_Anjanath_Icon.png'},
+    {id: 'radobaan', name: 'Radobaan', image: 'images/MH/Brute/MHW-Radobaan_Icon.png'},
+    {id: 'banbaro', name: 'Banbaro', image: 'images/MH/Brute/MHWI-Banbaro_Icon.png'},
+  //carapaceons
+    {id: 'daimyo', name: 'Daimyo Hermitaur', image: 'images/MH/Carapaceon/MH4U-Daimyo_Hermitaur_Icon.png'},
+    {id: 'plumdaimyo', name: 'Plum Daimyo Hermitaur', image: 'images/MH/Carapaceon/MH4U-Plum_Daimyo_Hermitaur_Icon.png'},
+    {id: 'stonedaimyo', name: 'Stonefist Hermitaur', image: 'images/MH/Carapaceon/MHGen-Stonefist_Hermitaur_Icon.png'},
+    {id: 'shogun', name: 'Shogun Ceanataur', image: 'images/MH/Carapaceon/Shogun_Ceanataur_Icon.png'},
+    {id: 'terrashogun', name: 'Terra Shogun Ceanataur', image: 'images/MH/Carapaceon/FUIOS-Terra_Shogun_Ceanataur_Icon.png'},
+    {id: 'rustshogun', name: 'Rustrazor Ceanataur', image: 'images/MH/Carapaceon/MHGU-Rustrazor_Ceanataur_Icon.png'},
+    {id: 'shengaoren', name: 'Shen Gaoren', image: 'images/MH/Carapaceon/MHFU-Shen_Gaoren_Icon.png'},
+  //leviathans
+    {id: 'ludroth', name: 'Royal Ludroth', image: 'images/MH/Leviathan/MH3U-Royal_Ludroth_Icon.png'},
+    {id: 'purpludroth', name: 'Purple Ludroth', image: 'images/MH/Leviathan/MH3U-Purple_Ludroth_Icon.png'},
+    {id: 'gobul', name: 'Gobul', image: 'images/MH/Leviathan/MH3U-Gobul_Icon.png'},
+    {id: 'nibelsnarf', name: 'Nibelsnarf', image: 'images/MH/Leviathan/MH3U-Nibelsnarf_Icon.png'},
+    {id: 'lagia', name: 'Lagiacrus', image: 'images/MH/Leviathan/MH3U-Lagiacrus_Icon.png'},
+    {id: 'ivorylagia', name: 'Ivory Lagiacrus', image: 'images/MH/Leviathan/MH3U-Ivory_Lagiacrus_Icon.png'},
+    {id: 'abysslagia', name: 'Abyssal Lagiacrus', image: 'images/MH/Leviathan/MH3U-Abyssal_Lagiacrus_Icon.png'},
+    {id: 'agnak', name: 'Agnaktor', image: 'images/MH/Leviathan/MH3U-Agnaktor_Icon.png'},
+    {id: 'glaceagnak', name: 'Glacial Agnaktor', image: 'images/MH/Leviathan/MH3U-Glacial_Agnaktor_Icon.png'},
+    {id: 'mizutsune', name: 'Mizutsune', image: 'images/MH/Leviathan/MHST2-Mizutsune_Icon.png'},
+    {id: 'soulmizutsune', name: 'Soulseer Mizutsune', image: 'images/MH/Leviathan/MHST2-Soulseer_Mizutsune_Icon.png'},
+    {id: 'somnacanth', name: 'Somnacanth', image: 'images/MH/Leviathan/MHRise-Somnacanth_Icon.png'},
+    {id: 'almudron', name: 'Almudron', image: 'images/MH/Leviathan/MHRise-Almudron_Icon.png'},
+  //neopterons
+    {id: 'vespoid', name: 'Vespoid Queen', image: 'images/MH/Neopteron/MHST2-Vespoid_Queen_Icon.png'},
+    {id: 'seltas', name: 'Seltas', image: 'images/MH/Neopteron/MHST2-Seltas_Icon.png'},
+    {id: 'seltasqueen', name: 'Seltas Queen', image: 'images/MH/Neopteron/MHST2-Seltas_Queen_Icon.png'},
+    {id: 'desertseltas', name: 'Desert Seltas', image: 'images/MH/Neopteron/MH4U-Desert_Seltas_Icon.png'},
+    {id: 'desseltasqueen', name: 'Desert Seltas Queen', image: 'images/MH/Neopteron/MHST2-Desert_Seltas_Queen_Icon.png'},
+    {id: 'ahtalka', name: 'Ahtal-Ka', image: 'images/MH/Neopteron/MHGU-Ahtal-Ka_Icon.png'},
+  //piscine wyverns
+    {id: 'cephadrome', name: 'Cephadrome', image: 'images/MH/Piscine/MHST2-Cephadrome_Icon.png'},
+    {id: 'plesioth', name: 'Plesioth', image: 'images/MH/Piscine/MH3U-Plesioth_Icon.png'},
+    {id: 'greenplesioth', name: 'Green Plesioth', image: 'images/MH/Piscine/MH3U-Green_Plesioth_Icon.png'},
+    {id: 'lavasioth', name: 'Lavasioth', image: 'images/MH/Piscine/MHW-Lavasioth_Icon.png'},
+    {id: 'jyura', name: 'Jyuratodus', image: 'images/MH/Piscine/MHW-Jyuratodus_Icon.png'},
+    {id: 'beotodus', name: 'Beotodus', image: 'images/MH/Piscine/MHWI-Beotodus_Icon.png'},
+  //snake wyverns
+    {id: 'najarala', name: 'Najarala', image: 'images/MH/Snake/MH4U-Najarala_Icon.png'},
+    {id: 'tidalnajarala', name: 'Tidal Najarala', image: 'images/MH/Snake/MH4U-Tidal_Najarala_Icon.png'},
+  //temnocerans
+    {id: 'nerscylla', name: 'Nerscylla', image: 'images/MH/Temnoceran/MHST2-Nerscylla_Icon.png'},
+    {id: 'shroudnerscylla', name: 'Shrouded Nerscylla', image: 'images/MH/Temnoceran/MHST2-Shrouded_Nerscylla_Icon.png'},
+    {id: 'raknakadaki', name: 'Rakna-Kadaki', image: 'images/MH/Temnoceran/MHRise-Rakna-Kadaki_Icon.png'},
+  //flying wyverns
+    {id: 'rathian', name: 'Rathian', image: 'images/MH/Flying/MHW-Rathian_Icon.png'},
+    {id: 'pinkrathian', name: 'Pink Rathian', image: 'images/MH/Flying/MHW-Pink_Rathian_Icon.png'},
+    {id: 'goldrathian', name: 'Gold Rathian', image: 'images/MH/Flying/MHWI-Gold_Rathian_Icon.png'},
+    {id: 'dreadrathian', name: 'Dreadqueen Rathian', image: 'images/MH/Flying/MHST2-Dreadqueen_Rathian_Icon.png'},
+    {id: 'rathalos', name: 'Rathalos', image: 'images/MH/Flying/MHW-Rathalos_Icon.png'},
+    {id: 'bluerathalos', name: 'Azure Rathalos', image: 'images/MH/Flying/MHW-Azure_Rathalos_Icon.png'},
+    {id: 'silvrathalos', name: 'Silver Rathalos', image: 'images/MH/Flying/MHWI-Silver_Rathalos_Icon.png'},
+    {id: 'dreadrathalos', name: 'Dreadking Rathalos', image: 'images/MH/Flying/MHGen-Dreadking_Rathalos_Icon.png'},
+    {id: 'diablos', name: 'Diablos', image: 'images/MH/Flying/MHW-Diablos_Icon.png'},
+    {id: 'blackdiablos', name: 'Black Diablos', image: 'images/MH/Flying/MHW-Black_Diablos_Icon.png'},
+    {id: 'blooddiablos', name: 'Bloodbath Diablos', image: 'images/MH/Flying/MHST2-Bloodbath_Diablos_Icon.png'},
+    {id: 'monoblos', name: 'Monoblos', image: 'images/MH/Flying/MHST2-Monoblos_Icon.png'},
+    {id: 'whitemonoblos', name: 'White Monoblos', image: 'images/MH/Flying/MHST2-White_Monoblos_Icon.png'},
+    {id: 'khezu', name: 'Khezu', image: 'images/MH/Flying/MHST2-Khezu_Icon.png'},
+    {id: 'redkhezu', name: 'Red Khezu', image: 'images/MH/Flying/MHST2-Red_Khezu_Icon.png'},
+    {id: 'basarios', name: 'Basarios', image: 'images/MH/Flying/MHO-Basarios_Icon.png'},
+    {id: 'rubybasarios', name: 'Ruby Basarios', image: 'images/MH/Flying/MHST2-Ruby_Basarios_Icon.png'},
+    {id: 'gravios', name: 'Gravios', image: 'images/MH/Flying/MHST2-Gravios_Icon.png'},
+    {id: 'blackgravios', name: 'Black Gravios', image: 'images/MH/Flying/MHST2-Black_Gravios_Icon.png'},
+    {id: 'akantor', name: 'Akantor', image: 'images/MH/Flying/MHO-Akantor_Icon.png'},
+    {id: 'ukanlos', name: 'Ukanlos', image: 'images/MH/Flying/MHP3-Ukanlos_Icon.png'},
+    {id: 'narga', name: 'Nargacuga', image: 'images/MH/Flying/MH3U-Nargacuga_Icon.png'},
+    {id: 'greennarga', name: 'Green Nargacuga', image: 'images/MH/Flying/MH3U-Green_Nargacuga_Icon.png'},
+    {id: 'lucentnarga', name: 'Lucent Nargacuga', image: 'images/MH/Flying/MH3U-Lucent_Nargacuga_Icon.png'},
+    {id: 'silvernarga', name: 'Silverwind Nargacuga', image: 'images/MH/Flying/MHST2-Silverwind_Nargacuga_Icon.png'},
+    {id: 'tigrex', name: 'Tigrex', image: 'images/MH/Flying/MHWI-Tigrex_Icon.png'},
+    {id: 'brutetigrex', name: 'Brute Tigrex', image: 'images/MH/Flying/MHWI-Brute_Tigrex_Icon.png'},
+    {id: 'moltentigrex', name: 'Molten Tigrex', image: 'images/MH/Flying/MHST-Molten_Tigrex_Icon.png'},
+    {id: 'grimtigrex', name: 'Grimclaw Tigrex', image: 'images/MH/Flying/MHST2-Grimclaw_Tigrex_Icon.png'},
+    {id: 'barioth', name: 'Barioth', image: 'images/MH/Flying/MHWI-Barioth_Icon.png'},
+    {id: 'sandbarioth', name: 'Sand Barioth', image: 'images/MH/Flying/MH3U-Sand_Barioth_Icon.png'},
+    {id: 'frostbarioth', name: 'Frostfang Barioth', image: 'images/MH/Flying/MHWI-Frostfang_Barioth_Icon.png'},
+    {id: 'giggi', name: 'Gigginox', image: 'images/MH/Flying/MH3U-Gigginox_Icon.png'},
+    {id: 'balefulgiggi', name: 'Baleful Gigginox', image: 'images/MH/Flying/MH3U-Baleful_Gigginox_Icon.png'},
+    {id: 'seregios', name: 'Seregios', image: 'images/MH/Flying/MHST2-Seregios_Icon.png'},
+    {id: 'astalos', name: 'Astalos', image: 'images/MH/Flying/MHST2-Astalos_Icon.png'},
+    {id: 'boltasta', name: 'Boltreaver Astalos', image: 'images/MH/Flying/MHST2-Boltreaver_Astalos_Icon.png'},
+    {id: 'paolumu', name: 'Paolumu', image: 'images/MH/Flying/MHW-Paolumu_Icon.png'},
+    {id: 'nightpaolumu', name: 'Nightshade Paolumu', image: 'images/MH/Flying/MHWI-Nightshade_Paolumu_Icon.png'},
+    {id: 'legiana', name: 'Legiana', image: 'images/MH/Flying/MHW-Legiana_Icon.png'},
+    {id: 'shrieklegiana', name: 'Shrieking Legiana', image: 'images/MH/Flying/MHWI-Shrieking_Legiana_Icon.png'},
+    {id: 'bazel', name: 'Bazelgeuse', image: 'images/MH/Flying/MHW-Bazelgeuse_Icon.png'},
+    {id: 'seethbazel', name: 'Seething Bazelgeuse', image: 'images/MH/Flying/MHWI-Seething_Bazelgeuse_Icon.png'},
+  //elder dragons
+    {id: 'fatalis', name: 'Fatalis', image: 'images/MH/Elder Dragon/MHWI-Fatalis_Icon.png'},
+    {id: 'whitefatalis', name: 'White Fatalis', image: 'images/MH/Elder Dragon/white_fatalis.png'},
+    {id: 'crimsonfatalis', name: 'Crimson Fatalis', image: 'images/MH/Elder Dragon/Crimson_Fatalis_Icon_by_YukiHerz_and_Rathalosaurus.png'},
+    {id: 'kirin', name: 'Kirin', image: 'images/MH/Elder Dragon/MHW-Kirin_Icon.png'},
+    {id: 'oroshikirin', name: 'Oroshi Kirin', image: 'images/MH/Elder Dragon/MHST2-Oroshi_Kirin_Icon.png'},
+    {id: 'laoshan', name: 'Lao-Shan Lung', image: 'images/MH/Elder Dragon/MHGU-Lao-Shan_Lung_Icon.png'},
+    {id: 'ashlaoshan', name: 'Ashen Lao-Shan Lung', image: 'images/MH/Elder Dragon/FrontierGen-Ashen_Lao-Shan_Lung_Icon.png'},
+    {id: 'chameleos', name: 'Chameleos', image: 'images/MH/Elder Dragon/MH4U-Chameleos_Icon.png'},
+    {id: 'kushala', name: 'Kushala Daora', image: 'images/MH/Elder Dragon/MHW-Kushala_Daora_Icon.png'},
+    {id: 'rustkushala', name: 'Rusted Kushala Daora', image: 'images/MH/Elder Dragon/MH4U-Rusted_Kushala_Daora_Icon.png'},
+    {id: 'teostra', name: 'Teostra', image: 'images/MH/Elder Dragon/MHW-Teostra_Icon.png'},
+    {id: 'lunastra', name: 'Lunastra', image: 'images/MH/Elder Dragon/MHW-Lunastra_Icon.png'},
+    {id: 'yamatsukami', name: 'Yama Tsukami', image: 'images/MH/Elder Dragon/MHO-Yama_Tsukami_Icon.png'},
+    {id: 'alatreon', name: 'Alatreon', image: 'images/MH/Elder Dragon/MHWI-Alatreon_Icon.png'},
+    {id: 'amatsu', name: 'Amatsu', image: 'images/MH/Elder Dragon/MHGen-Amatsu_Icon.png'},
+    {id: 'ceadeus', name: 'Ceadeus', image: 'images/MH/Elder Dragon/MH3U-Ceadeus_Icon.png'},
+    {id: 'goldceadeus', name: 'Goldbeard Ceadeus', image: 'images/MH/Elder Dragon/MH3U-Goldbeard_Ceadeus_Icon.png'},
+    {id: 'diremiralis', name: 'Dire Miralis', image: 'images/MH/Elder Dragon/dire_miralis.png'},
+    {id: 'jhen', name: 'Jhen Mohran', image: 'images/MH/Elder Dragon/MH3U-Jhen_Mohran_Icon.png'},
+    {id: 'hallowjhen', name: 'Hallowed Jhen Mohran', image: 'images/MH/Elder Dragon/MH3U-Hallowed_Jhen_Mohran_Icon.png'},
+    {id: 'dahren', name: "Dah'ren Mohran", image: 'images/MH/Elder Dragon/MH4U-Dahren_Mohran_Icon.png'},
+    {id: 'dalamadur', name: 'Dalamadur', image: 'images/MH/Elder Dragon/MH4U-Dalamadur-Head_Icon.png'},
+    {id: 'shadalamadur', name: 'Shah Dalamadur', image: 'images/MH/Elder Dragon/MH4U-Shah_Dalamadur-Head_Icon.png'},
+    {id: 'gogmazios', name: 'Gogmazios', image: 'images/MH/Elder Dragon/gogmazios.png'},
+    {id: 'nakarkos', name: 'Nakarkos', image: 'images/MH/Elder Dragon/MHGen-Nakarkos_Icon.png'},
+    {id: 'gore', name: 'Gore Magala', image: 'images/MH/___/MH4U-Gore_Magala_Icon.png'},
+    {id: 'chaoticgore', name: 'Chaotic Gore Magala', image: 'images/MH/___/MH4U-Chaotic_Gore_Magala_Icon.png'},
+    {id: 'shagaru', name: 'Shagaru Magala', image: 'images/MH/Elder Dragon/MH4U-Shagaru_Magala_Icon.png'},
+    {id: 'valstrax', name: 'Valstrax', image: 'images/MH/Elder Dragon/MHGU-Valstrax_Icon.png'},
+    {id: 'redvalstrax', name: 'Crimson Glow Valstrax', image: 'images/MH/Elder Dragon/MHRise-Crimson_Glow_Valstrax_Icon.png'},
+    {id: 'kulve', name: 'Kulve Taroth', image: 'images/MH/Elder Dragon/MHW-Kulve_Taroth_Icon.png'},
+    {id: 'namielle', name: 'Namielle', image: 'images/MH/Elder Dragon/MHWI-Namielle_Icon.png'},
+    {id: 'velkhana', name: 'Velkhana', image: 'images/MH/Elder Dragon/MHWI-Velkhana_Icon.png'},
+    {id: 'nergigante', name: 'Nergigante', image: 'images/MH/Elder Dragon/MHW-Nergigante_Icon.png'},
+    {id: 'ruinnergigante', name: 'Ruiner Nergigante', image: 'images/MH/Elder Dragon/MHWI-Ruiner_Nergigante_Icon.png'},
+    {id: 'vaal', name: 'Vaal Hazak', image: 'images/MH/Elder Dragon/MHW-Vaal_Hazak_Icon.png'},
+    {id: 'blackvaal', name: 'Blackveil Vaal Hazak', image: 'images/MH/Elder Dragon/MHWI-Blackveil_Vaal_Hazak_Icon.png'},
+    {id: 'shara', name: 'Shara Ishvalda', image: 'images/MH/Elder Dragon/MHWI-Shara_Ishvalda_Icon.png'},
+    {id: 'xeno', name: "Xeno'jiiva", image: 'images/MH/Elder Dragon/MHW-Xenojiiva_Icon.png'},
+    {id: 'safi', name: "Safi'jiiva", image: 'images/MH/Elder Dragon/MHWI-Safijiiva_Icon.png'},
+    {id: 'zorah', name: 'Zorah Magdaros', image: 'images/MH/Elder Dragon/MHW-Zorah_Magdaros_Icon.png'},
+    {id: 'ibushi', name: 'Wind Serpent Ibushi', image: 'images/MH/Elder Dragon/MHRise-Wind_Serpent_Ibushi_Icon.png'},
+    {id: 'narwa', name: 'Thunder Serpent Narwa', image: 'images/MH/Elder Dragon/MHRise-Thunder_Serpent_Narwa_Icon.png'},
+    {id: 'allmother', name: 'Narwa the Allmother', image: 'images/MH/Elder Dragon/MHRise-Narwa_the_Allmother_Icon.png'}
+];
+
+var myPicker = new picker.Picker({
+    items: items
+});
+
+var pickerUI = new PickerUI(myPicker, {
+    elements: {
+        pick: "#pick",
+        pass: "#pass",
+        undo: "#undo",
+        redo: "#redo",
+        evaluating: "#evaluating",
+        favorites: "#favorites"
+    }
+});
+
+pickerUI.initialize();
+
+/* Sortable favorites - you can safely remove this, and the Sortable.min.js script, if you don't want to be able to sort your favorite list. */
+var sortable = new Sortable(pickerUI.elem.favorites.get(0), {
+    draggable: '.item',
+    animation: 100,
+    onStart: function() {
+        pickerUI.elem.favorites.addClass("sorting");
+    },
+    onEnd: function() {
+        pickerUI.elem.favorites.removeClass("sorting");
+    },
+    onUpdate: function() {
+        myPicker.setFavorites(pickerUI.elem.favorites.children().map(function() {
+            return pickerUI.getItem(this);
+        }).get());
+        pickerUI.update(true);
+    }
+});
+/* End sortable favorites */
+</script>
 </body>
 </html>
