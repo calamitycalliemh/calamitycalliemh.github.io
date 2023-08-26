@@ -208,9 +208,9 @@ button.disabled:hover {
 <body>
 <h1>Monster Hunter Favorite Picker</h1>
 
-<p>Find out who your top favorite monsters in the Monster Hunter franchise are!
-  Mainline series games only. Pick as many as you want from each set of monsters.
-  No Rise Apex or Sunbreak Risen monsters will be listed.
+<p>Find out who your top favorite monsters in the Monster Hunter franchise are! Pick as many as you want from each set of monsters.
+  No Apex, Risen, or Zenith monsters will be listed.</br>
+  Musou monsters may be added at some point, though most of them share the same icon as their base form so I'm unsure how to approach that yet.</br>
 Source code from https://github.com/antialiasis/favorite-picker</p>
 
 <div id="container">
@@ -229,6 +229,13 @@ Source code from https://github.com/antialiasis/favorite-picker</p>
 </ol>
 </div>
 </div>
+<h3>Possible Future Updates</h3>
+<ul><li>Checkboxes to allow you to filter the list so it only includes monsters from games you have played</li>
+  <li>Smaller icons will be replaced with larger ones as I progress through frontier</li>
+  <li>New monsters will be added as games come out</li>
+  <li>If MH Explore or MH Online become playable again, monsters from those will be added</li>
+  <li>Final bosses from Stories and Stories 2 will be added if I can find decent icons for Versa/Makili Pietru (the official ones suck)</li>
+  <li>Gonna make it look prettier</li></ul>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="picker.js"></script>
 <script src="picker-ui.js"></script>
@@ -467,7 +474,72 @@ var items = [
     {id: 'primmalzeno', name: 'Primordial Malzeno', image: 'images/MH/Elder Dragon/MHRS-Primordial_Malzeno_Icon.png'},
     {id: 'gaisma', name: 'Gaismagorm', image: 'images/MH/Elder Dragon/MHRS-Gaismagorm_Icon.png'},
     //other
-    {id: 'kingshaka', name: 'King Shakalaka', image: 'images/MH/unknown/kingshakalaka.png'}
+    {id: 'kingshaka', name: 'King Shakalaka', image: 'images/MH/unknown/kingshakalaka.png'},
+    //frontier monsters
+    {id: 'farunokku', name: 'Farunokku', image: 'images/MH/Frontier/MHO-Farunokku_Icon.png'},
+    {id: 'taikun', name: 'Taikun Zamuza', image: 'images/MH/Frontier/taikunzamuza.png'},
+    {id: 'gogomoa', name: 'Gogomoa', image: 'images/MH/Frontier/gogomoa.png'},
+    {id: 'dyaragaua', name: 'Dyaragaua', image: 'images/MH/Frontier/dyuragaua.png'},
+    {id: 'abiorugu', name: 'Abiorugu', image: 'images/MH/Frontier/abiorugu.png'},
+    {id: 'gurenzeburu', name: 'Gurenzeburu', image: 'images/MH/Frontier/gurenzeburu.png'},
+    {id: 'breedhypno', name: 'Breeding Season Hypnocatrice', image: 'images/MH/Frontier/brighthypnoc.png'},
+    {id: 'pariapuria', name: 'Pariapuria', image: 'images/MH/Frontier/pariapuria.png'},
+    {id: 'redlavasi', name: 'Red Lavasioth', image: 'images/MH/Frontier/redlavasioth.png'},
+    {id: 'nono', name: 'Nono Orugaron', image: 'images/MH/Frontier/nono.png'},
+    {id: 'kamu', name: 'Kamu Orugaron', image: 'images/MH/Frontier/kamu.png'},
+    {id: 'silverhypno', name: 'Silver Hypnocatrice', image: 'images/MH/Frontier/MHO-Silver_Hypnocatrice_Icon.png'},
+    {id: 'vashimu', name: 'Akura Vashimu', image: 'images/MH/Frontier/vashimu.png'},
+    {id: 'jebia', name: 'Akura Jebia', image: 'images/MH/Frontier/akurajebia.png'},
+    {id: 'berukyurosu', name: 'Berukyurosu', image: 'images/MH/Frontier/berukyurosu.png'},
+    {id: 'doragyurosu', name: 'Doragyurosu', image: 'images/MH/Frontier/doragyurosu.png'},
+    {id: 'kuarusepusu', name: 'Kuarusepusu', image: 'images/MH/Frontier/kuarusepusu.png'},
+    {id: 'raviente', name: 'Raviente', image: 'images/MH/Frontier/raviente.png'},
+    {id: 'vioraviente', name: 'Violent Raviente', image: 'images/MH/Frontier/violentraviente.png'},
+    {id: 'berraviente', name: 'Berserk Raviente', image: 'images/MH/Frontier/berserkraviente.png'},
+    {id: 'whiteespinas', name: 'White Espinas', image: 'images/MH/Frontier/whiteespinas.png'},
+    {id: 'raygougarf', name: 'Ray Gougarf', image: 'images/MH/Frontier/raygougarf.png'},
+    {id: 'lologougarf', name: 'Lolo Gougarf', image: 'images/MH/Frontier/lologougarf.png'},
+    {id: 'anorupatisu', name: 'Anorupatisu', image: 'images/MH/Frontier/anorupatisu.png'},
+    {id: 'baruragaru', name: 'Baruragaru', image: 'images/MH/Frontier/baruragaru.png'},
+    {id: 'diorex', name: 'Diorex', image: 'images/MH/Frontier/diorex.png'},
+    {id: 'gurea', name: 'Gureadomosu', image: 'images/MH/Frontier/gureadomosu.png'},
+    {id: 'meraginasu', name: 'Meraginasu', image: 'images/MH/Frontier/meraginasu.png'},
+    {id: 'odibatorasu', name: 'Odibatorasu', image: 'images/MH/Frontier/odibatorasu.png'},
+    {id: 'poborubarumu', name: 'Poborubarumu', image: 'images/MH/Frontier/poborubarumu.png'},
+    {id: 'toridcless', name: 'Toridcless', image: 'images/MH/Frontier/toridcless.png'},
+    {id: 'unknown', name: 'Unknown', image: 'images/MH/Frontier/unknown.png'},
+    {id: 'valsablos', name: 'Valsablos', image: 'images/MH/Frontier/valsablos.png'},
+    {id: 'voljang', name: 'Voljang', image: 'images/MH/Frontier/voljang.png'},
+    {id: 'zenaserisu', name: 'Zenaserisu', image: 'images/MH/Frontier/zenaserisu.png'},
+    {id: 'zerureusu', name: 'Zerureusu', image: 'images/MH/Frontier/zerureusu.png'},
+    {id: 'bogabadorumu', name: 'Bogabadorumu', image: 'images/MH/Frontier/bogabadorumu.png'},
+    {id: 'aruganosu', name: 'Aruganosu', image: 'images/MH/Frontier/aruganosu.png'},
+    {id: 'goruganosu', name: 'Goruganosu', image: 'images/MH/Frontier/goruganosu.png'},
+    {id: 'forokururu', name: 'Forokururu', image: 'images/MH/Frontier/forokururu.png'},
+    {id: 'gasurabazura', name: 'Gasurabazura', image: 'images/MH/Frontier/gasurabazura.png'},
+    //monsters below this line have low quality icons
+    {id: 'giaorugu', name: 'Giaorugu', image: 'images/MH/Frontier/giaorugu.png'},
+    {id: 'hyujikiki', name: 'Hyujikiki', image: 'images/MH/Frontier/hyujikiki.png'},
+    {id: 'miru', name: 'Mi Ru', image: 'images/MH/Frontier/miru.png'},
+    {id: 'midogaron', name: 'Midogaron', image: 'images/MH/Frontier/midogaron.png'},
+    {id: 'pokaradon', name: 'Pokaradon', image: 'images/MH/Frontier/pokaradon.png'},
+
+    //frontier elders
+    {id: 'rukodiora', name: 'Rukodiora', image: 'images/MH/Frontier Elders/rukodiora.png'},
+    //rebidiora needs better icon
+    {id: 'rebidiora', name: 'Rebidiora', image: 'images/MH/Frontier Elders/rebidiora.png'},
+    {id: 'disufiroa', name: 'Disufiroa', image: 'images/MH/Frontier Elders/disufiroa.png'},
+    {id: 'duremudira', name: 'Duremudira', image: 'images/MH/Frontier Elders/duremudira.png'},
+    {id: 'eruzerion', name: 'Eruzerion', image: 'images/MH/Frontier Elders/eruzerion.png'},
+    //garuba daora needs better icon
+    {id: 'garuba', name: 'Garuba Daora', image: 'images/MH/Frontier Elders/garubadaora.png'},
+    {id: 'guanzorumu', name: 'Guanzorumu', image: 'images/MH/Frontier Elders/guanzorumu.png'},
+    {id: 'harudomerugu', name: 'Harudomerugu', image: 'images/MH/Frontier Elders/harudomerugu.png'},
+    {id: 'inagami', name: 'Inagami', image: 'images/MH/Frontier Elders/inagami.png'},
+    {id: 'keoaruboru', name: 'Keoaruboru', image: 'images/MH/Frontier Elders/keoaruboru.png'},
+    {id: 'shantien', name: 'Shantien', image: 'images/MH/Frontier Elders/shantien.png'},
+    {id: 'toatesu', name: 'Toa Tesukatora', image: 'images/MH/Frontier Elders/toatesukatora.png'},
+    {id: 'yamakurai', name: 'Yama Kurai', image: 'images/MH/Frontier Elders/yamakurai.png'},
 ];
 
 var myPicker = new picker.Picker({
