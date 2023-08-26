@@ -462,7 +462,7 @@
             if (options.shortcodeLength && (!options.items[i].shortcode || options.items[i].shortcode.length !== options.shortcodeLength)) {
                 console.error("You have defined a shortcode length of " + options.shortcodeLength + "; however, you have an item with a shortcode that does not match this length (" + options.items[i].shortcode + "). The shortcode functionality only works if the item shortcodes are of a consistent length.", options.items[i]);
                 return;
-            } 
+            }
             this.itemMap[options.items[i].id] = options.items[i];
         }
 
