@@ -221,6 +221,7 @@ Source code from <a>https://github.com/antialiasis/favorite-picker</a></p>
 <label><input type="checkbox" name="games" class="games" value="gu" checked> Generations Ultimate</label>
 <label><input type="checkbox" name="games" class="games" value="worldborne" checked> World/Iceborne</label>
 <label><input type="checkbox" name="games" class="games" value="risebreak" checked> Rise/Sunbreak</label>
+<label><input type="checkbox" name="games" class="games" value="wilds" checked> Wilds (Beta)</label>
 <label><input type="checkbox" name="games" class="games" value="stories" checked> Stories</label>
 <label><input type="checkbox" name="games" class="games" value="stories2" checked> Stories 2</label>
 </p>
@@ -252,7 +253,7 @@ Source code from <a>https://github.com/antialiasis/favorite-picker</a></p>
 <ul>
   <li>Icons for Mi Ru and the Pietrus will be replaced with higher quality ones (these dont seem to be readily available anywhere)</li>
   <li>New monsters will be added as new games come out</li>
-  <li>If MH Explore or MH Online become playable again, monsters from those will be added (or maybe I'll add some of them anyway just for fun :3)</li>
+  <li>If MH Explore or MH Online becomes playable again, monsters from those will be added (or maybe I'll add some of them anyway just for fun :3)</li>
   <li>Gonna make it look prettier</li>
 </ul>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
@@ -325,6 +326,7 @@ var items = [
     {id: 'goss', name: 'Goss Harag', image: 'images/MH/Fanged Beast/MHRise-Goss_Harag_Icon.png', game:['risebreak'], style:[]},
     {id: 'bob', name: 'Blood Orange Bishaten', image: 'images/MH/Fanged Beast/MHRS-Blood_Orange_Bishaten_Icon.png', game:['risebreak'], style:['subspecies']},
     {id: 'garangolm', name: 'Garangolm', image: 'images/MH/Fanged Beast/MHRS-Garangolm_Icon.png', game:['risebreak'], style:[]},
+    {id: 'doshaguma', name: 'Doshaguma', image: 'images/MH/Fanged Beast/Doshaguma.png', game:['wilds'], style:[]},
   //amphibians
     {id: 'tetsu', name: 'Tetsucabra', image: 'images/MH/Amphibian/MH4U-Tetsucabra_Icon.png', game:['4u', 'gu', 'stories2'], style:[]},
     {id: 'berzerktetsu', name: 'Berzerk Tetsucabra', image: 'images/MH/Amphibian/MH10th-Berserk_Tetsucabra_Icon.png', game:['4u'], style:['subspecies']},
@@ -332,6 +334,7 @@ var items = [
     {id: 'zamtrios', name: 'Zamtrios', image: 'images/MH/Amphibian/MH4U-Zamtrios_Icon.png', game:['4u', 'gu', 'stories', 'stories2'], style:[]},
     {id: 'tigerzamtrios', name: 'Tigerstripe Zamtrios', image: 'images/MH/Amphibian/MH4U-Tigerstripe_Zamtrios_Icon.png', game:['4u'], style:['subspecies']},
     {id: 'tetranadon', name: 'Tetranadon', image: 'images/MH/Amphibian/MHRise-Tetranadon_Icon.png', game:['risebreak'], style:[]},
+    {id: 'chatacabra', name: 'Chatacabra', image: 'images/MH/Amphibian/Chatacabra.png', game:['wilds'], style:[]},
   //brute wyverns
     {id: 'barroth', name: 'Barroth', image: 'images/MH/Brute/MH3U-Barroth_Icon.png', game:['tri', '3u', 'gu', 'worldborne', 'risebreak', 'stories', 'stories2'], style:[]},
     {id: 'jadebarroth', name: 'Jade Barroth', image: 'images/MH/Brute/MH3U-Jade_Barroth_Icon.png', game:['3u', 'stories', 'stories2'], style:['subspecies']},
@@ -376,6 +379,7 @@ var items = [
     {id: 'aurorasomna', name: 'Aurora Somnacanth', image: 'images/MH/Leviathan/MHRS-Aurora_Somnacanth_Icon.png', game:['risebreak'], style:['subspecies']},
     {id: 'almudron', name: 'Almudron', image: 'images/MH/Leviathan/MHRise-Almudron_Icon.png', game:['risebreak'], style:[]},
     {id: 'magmadron', name: 'Magma Almudron', image: 'images/MH/Leviathan/MHRS-Magma_Almudron_Icon.png', game:['risebreak'], style:['subspecies']},
+    {id: 'balahara', name: 'Balahara', image: 'images/MH/Leviathan/Balahara.png', game:['wilds'], style:[]},
   //neopterons
     {id: 'vespoid', name: 'Vespoid Queen', image: 'images/MH/Neopteron/MHST2-Vespoid_Queen_Icon.png', game:['fu'], style:[]},
     {id: 'seltas', name: 'Seltas', image: 'images/MH/Neopteron/MHST2-Seltas_Icon.png', game:['4u', 'gu', 'stories2'], style:[]},
@@ -444,6 +448,7 @@ var items = [
     {id: 'seethbazel', name: 'Seething Bazelgeuse', image: 'images/MH/Flying/MHWI-Seething_Bazelgeuse_Icon.png', game:['worldborne', 'risebreak'], style:['subspecies']},
     {id: 'espinas', name: 'Espinas', image: 'images/MH/Flying/MHRS-Espinas_Icon.png', game:['frontier', 'risebreak'], style:[]},
     {id: 'brownespinas', name: 'Flaming Espinas', image: 'images/MH/Flying/MHRS-Flaming_Espinas_Icon.png', game:['frontier', 'risebreak'], style:['subspecies']},
+    {id: 'reydau', name: 'Rey Dau', image: 'images/MH/Flying/Rey_Dau.png', game:['wilds'], style:[]},
   //elder dragons
     {id: 'fatalis', name: 'Fatalis', image: 'images/MH/Elder Dragon/MHWI-Fatalis_Icon.png', game:['frontier', 'fu', '4u', 'gu', 'worldborne', 'stories', 'stories2'], style:[]},
     {id: 'whitefatalis', name: 'White Fatalis', image: 'images/MH/Elder Dragon/white_fatalis.png', game:['frontier', 'fu', '4u'], style:['subspecies']},
@@ -593,7 +598,7 @@ var myPicker = new picker.Picker({
     items: items,
     localStorageKey: 'picker-state',
     defaultSettings: {
-        games: ['frontier', 'fu', 'tri', '3u', '4u', 'gu', 'worldborne', 'risebreak'],
+        games: ['frontier', 'fu', 'tri', '3u', '4u', 'gu', 'worldborne', 'risebreak', 'wilds'],
         styles: ['subspecies', 'deviant', 'apex', 'musou'],
     },
     shouldIncludeItem: function(item, settings) {
