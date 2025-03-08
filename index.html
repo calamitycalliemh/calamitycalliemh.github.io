@@ -210,7 +210,7 @@ button.disabled:hover {
 
 <p>Find out who your top favorite monsters in the Monster Hunter franchise are! Pick as many as you want from each set of monsters.
   No Zenith monsters will be listed.</br>
-Source code from <a>https://github.com/antialiasis/favorite-picker</a></p>
+Source code adapted from <a>https://github.com/antialiasis/favorite-picker</a></p>
 
 <p>Include Monsters From:
 <label><input type="checkbox" name="games" class="games" value="frontier" checked> Frontier</label>
@@ -221,7 +221,7 @@ Source code from <a>https://github.com/antialiasis/favorite-picker</a></p>
 <label><input type="checkbox" name="games" class="games" value="gu" checked> Generations Ultimate</label>
 <label><input type="checkbox" name="games" class="games" value="worldborne" checked> World/Iceborne</label>
 <label><input type="checkbox" name="games" class="games" value="risebreak" checked> Rise/Sunbreak</label>
-<label><input type="checkbox" name="games" class="games" value="wilds" checked> Wilds (Beta)</label>
+<label><input type="checkbox" name="games" class="games" value="wilds" checked> Wilds</label>
 <label><input type="checkbox" name="games" class="games" value="stories" checked> Stories</label>
 <label><input type="checkbox" name="games" class="games" value="stories2" checked> Stories 2</label>
 </p>
@@ -230,6 +230,7 @@ Source code from <a>https://github.com/antialiasis/favorite-picker</a></p>
 <label><input type="checkbox" name="styles" class="styles" value="subspecies" checked> Subspecies/Variants/Rare Species</label>
 <label><input type="checkbox" name="styles" class="styles" value="deviant" checked> Deviants</label>
 <label><input type="checkbox" name="styles" class="styles" value="apex" checked> Apexes/Risen Elders</label>
+<label><input type="checkbox" name="styles" class="styles" value="guardian" checked> Guardians</label>
 <label><input type="checkbox" name="styles" class="styles" value="musou" checked> Extreme Individuals</label>
 </p>
 
@@ -269,7 +270,7 @@ var items = [
     {id: 'gendrome', name: 'Gendrome', image: 'images/MH/Bird/MH4U-Gendrome_Icon.png', game:['frontier', 'fu', '4u', 'gu', 'stories', 'stories2'], style:[]},
     {id: 'iodrome', name: 'Iodrome', image: 'images/MH/Bird/MH4U-Iodrome_Icon.png', game:['frontier', 'fu', '4u', 'gu', 'stories', 'stories2'], style:[]},
     {id: 'giadrome', name: 'Giadrome', image: 'images/MH/Bird/MHFU-Giadrome_Icon.png', game:['frontier', 'fu', 'gu',], style:[]},
-    {id: 'yiankutku', name: 'Yian Kut-Ku', image: 'images/MH/Bird/MH4U-Yian_Kut-Ku_Icon.png', game:['frontier', 'fu', '4u', 'gu', 'stories', 'stories2'], style:[]},
+    {id: 'yiankutku', name: 'Yian Kut-Ku', image: 'images/MH/Bird/MH4U-Yian_Kut-Ku_Icon.png', game:['frontier', 'fu', '4u', 'gu', 'stories', 'stories2', 'wilds'], style:[]},
     {id: 'blyiankutku', name: 'Blue Yian Kut-Ku', image: 'images/MH/Bird/MH4U-Blue_Yian_Kut-Ku_Icon.png', game:['frontier', 'fu', '4u', 'stories', 'stories2'], style:['subspecies']},
     {id: 'yiangaruga', name: 'Yian Garuga', image: 'images/MH/Bird/MHWI-Yian_Garuga_Icon.png', game:['frontier', 'fu', '4u', 'gu', 'worldborne', 'stories', 'stories2'], style:[]},
     {id: 'scaryiangaruga', name: 'Scarred Yian Garuga', image: 'images/MH/Bird/MHWI-Scarred_Yian_Garuga_Icon.png', game:['fu', '4u', 'worldborne'], style:['subspecies']},
@@ -307,9 +308,9 @@ var items = [
     {id: 'lunagaron', name: 'Lunagaron', image: 'images/MH/Fanged Wyvern/MHRS-Lunagaron_Icon.png', game:['risebreak'], style:[]},
   //fanged beasts
     {id: 'bulldrome', name: 'Bulldrome', image: 'images/MH/Fanged Beast/MHST2-Bulldrome_Icon.png', game:['frontier', 'fu', 'gu', 'stories', 'stories2'], style:[]},
-    {id: 'blangonga', name: 'Blangonga', image: 'images/MH/Fanged Beast/Blangonga_Icon.png', game:['frontier', 'fu', 'gu'], style:[]},
+    {id: 'blangonga', name: 'Blangonga', image: 'images/MH/Fanged Beast/Blangonga_Icon.png', game:['frontier', 'fu', 'gu', 'wilds'], style:[]},
     {id: 'copperblangonga', name: 'Copper Blangonga', image: 'images/MH/Fanged Beast/FUIOS-Copper_Blangonga_Icon.png', game:['fu'], style:['subspecies']},
-    {id: 'congalala', name: 'Congalala', image: 'images/MH/Fanged Beast/MHST2-Congalala_Icon.png', game:['frontier', 'fu', '4u', 'gu', 'stories', 'stories2'], style:[]},
+    {id: 'congalala', name: 'Congalala', image: 'images/MH/Fanged Beast/MHST2-Congalala_Icon.png', game:['frontier', 'fu', '4u', 'gu', 'stories', 'stories2', 'wilds'], style:[]},
     {id: 'emeraldconga', name: 'Emerald Congalala', image: 'images/MH/Fanged Beast/MHST2-Emerald_Congalala_Icon.png', game:['fu', '4u', 'stories', 'stories2'], style:['subspecies']},
     {id: 'rajang', name: 'Rajang', image: 'images/MH/Fanged Beast/MHWI-Rajang_Icon.png', game:['frontier', 'fu', '4u', 'gu', 'worldborne', 'risebreak', 'stories', 'stories2'], style:[]},
     {id: 'furiousrajang', name: 'Furious Rajang', image: 'images/MH/Fanged Beast/MHWI-Furious_Rajang_Icon.png', game:['fu', '4u', 'gu', 'worldborne', 'risebreak'], style:['subspecies']},
@@ -327,6 +328,7 @@ var items = [
     {id: 'bob', name: 'Blood Orange Bishaten', image: 'images/MH/Fanged Beast/MHRS-Blood_Orange_Bishaten_Icon.png', game:['risebreak'], style:['subspecies']},
     {id: 'garangolm', name: 'Garangolm', image: 'images/MH/Fanged Beast/MHRS-Garangolm_Icon.png', game:['risebreak'], style:[]},
     {id: 'doshaguma', name: 'Doshaguma', image: 'images/MH/Fanged Beast/Doshaguma.png', game:['wilds'], style:[]},
+    {id: 'ajarakan', name: 'Ajarakan', image: 'images/MH/Fanged Beast/Ajarakan.png', game:['wilds'], style:[]},
   //amphibians
     {id: 'tetsu', name: 'Tetsucabra', image: 'images/MH/Amphibian/MH4U-Tetsucabra_Icon.png', game:['4u', 'gu', 'stories2'], style:[]},
     {id: 'berzerktetsu', name: 'Berzerk Tetsucabra', image: 'images/MH/Amphibian/MH10th-Berserk_Tetsucabra_Icon.png', game:['4u'], style:['subspecies']},
@@ -354,6 +356,8 @@ var items = [
     {id: 'fulguranjanath', name: 'Fulgur Anjanath', image: 'images/MH/Brute/MHWI-Fulgur_Anjanath_Icon.png', game:['worldborne', 'stories2'], style:['subspecies']},
     {id: 'radobaan', name: 'Radobaan', image: 'images/MH/Brute/MHW-Radobaan_Icon.png', game:['worldborne'], style:[]},
     {id: 'banbaro', name: 'Banbaro', image: 'images/MH/Brute/MHWI-Banbaro_Icon.png', game:['worldborne'], style:[]},
+    {id: 'quematrice', name: 'Quematrice', image: 'images/MH/Brute/Quematrice.png', game:['wilds'], style:[]},
+    {id: 'rompopolo', name: 'Rompopolo', image: 'images/MH/Brute/Rompopolo.png', game:['wilds'], style:[]},
   //carapaceons
     {id: 'daimyo', name: 'Daimyo Hermitaur', image: 'images/MH/Carapaceon/MH4U-Daimyo_Hermitaur_Icon.png', game:['frontier', 'fu', '4u', 'gu', 'risebreak', 'stories', 'stories2'], style:[]},
     {id: 'plumdaimyo', name: 'Plum Daimyo Hermitaur', image: 'images/MH/Carapaceon/MH4U-Plum_Daimyo_Hermitaur_Icon.png', game:['fu', '4u', 'stories', 'stories2'], style:['subspecies']},
@@ -380,6 +384,9 @@ var items = [
     {id: 'almudron', name: 'Almudron', image: 'images/MH/Leviathan/MHRise-Almudron_Icon.png', game:['risebreak'], style:[]},
     {id: 'magmadron', name: 'Magma Almudron', image: 'images/MH/Leviathan/MHRS-Magma_Almudron_Icon.png', game:['risebreak'], style:['subspecies']},
     {id: 'balahara', name: 'Balahara', image: 'images/MH/Leviathan/Balahara.png', game:['wilds'], style:[]},
+    {id: 'hirabami', name: 'Hirabami', image: 'images/MH/Leviathan/Hirabami.png', game:['wilds'], style:[]},
+    {id: 'uthduna', name: 'Uth Duna', image: 'images/MH/Leviathan/UthDuna.png', game:['wilds'], style:[]},
+    {id: 'jindahaad', name: 'Jin Dahaad', image: 'images/MH/Leviathan/JinDahaad.png', game:['wilds'], style:[]},
   //neopterons
     {id: 'vespoid', name: 'Vespoid Queen', image: 'images/MH/Neopteron/MHST2-Vespoid_Queen_Icon.png', game:['fu'], style:[]},
     {id: 'seltas', name: 'Seltas', image: 'images/MH/Neopteron/MHST2-Seltas_Icon.png', game:['4u', 'gu', 'stories2'], style:[]},
@@ -398,16 +405,20 @@ var items = [
     {id: 'najarala', name: 'Najarala', image: 'images/MH/Snake/MH4U-Najarala_Icon.png', game:['4u', 'gu'], style:[]},
     {id: 'tidalnajarala', name: 'Tidal Najarala', image: 'images/MH/Snake/MH4U-Tidal_Najarala_Icon.png', game:['4u'], style:['subspecies']},
   //temnocerans
-    {id: 'nerscylla', name: 'Nerscylla', image: 'images/MH/Temnoceran/MHST2-Nerscylla_Icon.png', game:['4u', 'gu', 'stories', 'stories2'], style:[]},
+    {id: 'nerscylla', name: 'Nerscylla', image: 'images/MH/Temnoceran/MHST2-Nerscylla_Icon.png', game:['4u', 'gu', 'stories', 'stories2', 'wilds'], style:[]},
     {id: 'shroudnerscylla', name: 'Shrouded Nerscylla', image: 'images/MH/Temnoceran/MHST2-Shrouded_Nerscylla_Icon.png', game:['4u', 'stories', 'stories2'], style:['subspecies']},
     {id: 'raknakadaki', name: 'Rakna-Kadaki', image: 'images/MH/Temnoceran/MHRise-Rakna-Kadaki_Icon.png', game:['risebreak'], style:[]},
     {id: 'pyrerakna', name: 'Pyre Rakna-Kadaki', image: 'images/MH/Temnoceran/MHRS-Pyre_Rakna-Kadaki_Icon.png', game:['risebreak'], style:['subspecies']},
+    {id: 'lalabarina', name: 'Lala Barina', image: 'images/MH/Temnoceran/LalaBarina.png', game:['wilds'], style:[]},
+  //cephalopods
+    {id: 'nuudra', name: 'Nu Udra', image: 'images/MH/Cephalopod/NuUdra.png', game:['wilds'], style:[]},
+    {id: 'xuwu', name: 'Xu Wu', image: 'images/MH/Cephalopod/XuWu.png', game:['wilds'], style:[]},
   //flying wyverns
-    {id: 'rathian', name: 'Rathian', image: 'images/MH/Flying/MHW-Rathian_Icon.png', game:['frontier', 'fu', 'tri', '3u', '4u', 'gu', 'worldborne', 'risebreak', 'stories', 'stories2'], style:[]},
+    {id: 'rathian', name: 'Rathian', image: 'images/MH/Flying/MHW-Rathian_Icon.png', game:['frontier', 'fu', 'tri', '3u', '4u', 'gu', 'worldborne', 'risebreak', 'stories', 'stories2', 'wilds'], style:[]},
     {id: 'pinkrathian', name: 'Pink Rathian', image: 'images/MH/Flying/MHW-Pink_Rathian_Icon.png', game:['frontier', 'fu', '3u', '4u', 'worldborne', 'stories', 'stories2'], style:['subspecies']},
     {id: 'goldrathian', name: 'Gold Rathian', image: 'images/MH/Flying/MHWI-Gold_Rathian_Icon.png', game:['frontier', 'fu', '3u', '4u', 'gu', 'worldborne', 'risebreak', 'stories', 'stories2'], style:['subspecies']},
     {id: 'dreadrathian', name: 'Dreadqueen Rathian', image: 'images/MH/Flying/MHST2-Dreadqueen_Rathian_Icon.png', game:['gu', 'stories2'], style:['deviant']},
-    {id: 'rathalos', name: 'Rathalos', image: 'images/MH/Flying/MHW-Rathalos_Icon.png', game:['frontier', 'fu', 'tri', '3u', '4u', 'gu', 'worldborne', 'risebreak', 'stories', 'stories2'], style:[]},
+    {id: 'rathalos', name: 'Rathalos', image: 'images/MH/Flying/MHW-Rathalos_Icon.png', game:['frontier', 'fu', 'tri', '3u', '4u', 'gu', 'worldborne', 'risebreak', 'stories', 'stories2', 'wilds'], style:[]},
     {id: 'bluerathalos', name: 'Azure Rathalos', image: 'images/MH/Flying/MHW-Azure_Rathalos_Icon.png', game:['frontier', 'fu', '3u', '4u', 'worldborne', 'stories', 'stories2'], style:['subspecies']},
     {id: 'silvrathalos', name: 'Silver Rathalos', image: 'images/MH/Flying/MHWI-Silver_Rathalos_Icon.png', game:['frontier', 'fu', '3u', '4u', 'gu', 'worldborne', 'risebreak', 'stories', 'stories2'], style:['subspecies']},
     {id: 'dreadrathalos', name: 'Dreadking Rathalos', image: 'images/MH/Flying/MHGen-Dreadking_Rathalos_Icon.png', game:['gu', 'stories2'], style:['deviant']},
@@ -420,7 +431,7 @@ var items = [
     {id: 'redkhezu', name: 'Red Khezu', image: 'images/MH/Flying/MHST2-Red_Khezu_Icon.png', game:['frontier', 'fu', '4u', 'stories', 'stories2'], style:['subspecies']},
     {id: 'basarios', name: 'Basarios', image: 'images/MH/Flying/MHO-Basarios_Icon.png', game:['frontier', 'fu', '4u', 'gu', 'risebreak', 'stories', 'stories2'], style:[]},
     {id: 'rubybasarios', name: 'Ruby Basarios', image: 'images/MH/Flying/MHST2-Ruby_Basarios_Icon.png', game:['4u', 'stories', 'stories2'], style:['subspecies']},
-    {id: 'gravios', name: 'Gravios', image: 'images/MH/Flying/MHST2-Gravios_Icon.png', game:['frontier', 'fu', '4u', 'gu', 'stories', 'stories2'], style:[]},
+    {id: 'gravios', name: 'Gravios', image: 'images/MH/Flying/MHST2-Gravios_Icon.png', game:['frontier', 'fu', '4u', 'gu', 'stories', 'stories2', 'wilds'], style:[]},
     {id: 'blackgravios', name: 'Black Gravios', image: 'images/MH/Flying/MHST2-Black_Gravios_Icon.png', game:['frontier', 'fu', '4u', 'stories', 'stories2'], style:['subspecies']},
     {id: 'akantor', name: 'Akantor', image: 'images/MH/Flying/MHO-Akantor_Icon.png', game:['frontier', 'fu', '4u', 'gu'], style:[]},
     {id: 'ukanlos', name: 'Ukanlos', image: 'images/MH/Flying/MHP3-Ukanlos_Icon.png', game:['fu', '4u', 'gu'], style:[]},
@@ -476,7 +487,7 @@ var items = [
     {id: 'shadalamadur', name: 'Shah Dalamadur', image: 'images/MH/Elder Dragon/MH4U-Shah-Dalamadur-Head_Icon.png', game:['4u'], style:['subspecies']},
     {id: 'gogmazios', name: 'Gogmazios', image: 'images/MH/Elder Dragon/431-4310615_achievement-icon-monster-hunter-gogmazios-icon.png', game:['4u'], style:[]},
     {id: 'nakarkos', name: 'Nakarkos', image: 'images/MH/Elder Dragon/MHGen-Nakarkos_Icon.png', game:['gu'], style:[]},
-    {id: 'gore', name: 'Gore Magala', image: 'images/MH/unknown/MH4U-Gore_Magala_Icon.png', game:['frontier', '4u', 'gu', 'risebreak'], style:[]},
+    {id: 'gore', name: 'Gore Magala', image: 'images/MH/unknown/MH4U-Gore_Magala_Icon.png', game:['frontier', '4u', 'gu', 'risebreak', 'wilds'], style:[]},
     {id: 'chaoticgore', name: 'Chaotic Gore Magala', image: 'images/MH/unknown/MH4U-Chaotic_Gore_Magala_Icon.png', game:['4u', 'gu', 'risebreak'], style:['subspecies']},
     {id: 'shagaru', name: 'Shagaru Magala', image: 'images/MH/Elder Dragon/MH4U-Shagaru_Magala_Icon.png', game:['frontier', '4u', 'gu', 'risebreak'], style:[]},
     {id: 'valstrax', name: 'Valstrax', image: 'images/MH/Elder Dragon/MHGU-Valstrax_Icon.png', game:['gu'], style:[]},
@@ -498,9 +509,16 @@ var items = [
     {id: 'malzeno', name: 'Malzeno', image: 'images/MH/Elder Dragon/MHRS-Malzeno_Icon.png', game:['risebreak'], style:[]},
     {id: 'primmalzeno', name: 'Primordial Malzeno', image: 'images/MH/Elder Dragon/MHRS-Primordial_Malzeno_Icon.png', game:['risebreak'], style:['subspecies']},
     {id: 'gaisma', name: 'Gaismagorm', image: 'images/MH/Elder Dragon/MHRS-Gaismagorm_Icon.png', game:['risebreak'], style:[]},
-    //other
+  //constructs
+    {id: 'gdosha', name: 'Guardian Doshaguma', image: 'images/MH/Construct/GuardianDosha.png', game:['wilds'], style:['guardian']},
+    {id: 'gratha', name: 'Guardian Rathalos', image: 'images/MH/Construct/GuardianRathalos.png', game:['wilds'], style:['guardian']},
+    {id: 'gebony', name: 'Guardian Ebony Odogaron', image: 'images/MH/Construct/GuardianEbony.png', game:['wilds'], style:['guardian']},
+    {id: 'gfulgur', name: 'Guardian Fulgur Anjanath', image: 'images/MH/Construct/GuardianFulgur.png', game:['wilds'], style:['guardian']},
+    {id: 'garkveld', name: 'Guardian Arkveld', image: 'images/MH/Construct/GuardianArkveld.png', game:['wilds'], style:['guardian']},
+    {id: 'zohshia', name: 'Zoh Shia', image: 'images/MH/Construct/ZohShia.png', game:['wilds'], style:[]},
+  //other
     {id: 'kingshaka', name: 'King Shakalaka', image: 'images/MH/unknown/kingshakalaka.png', game:['fu'], style:[]},
-    //frontier monsters
+  //frontier monsters
     {id: 'taikun', name: 'Taikun Zamuza', image: 'images/MH/Frontier/taikunzamuza.png', game:['frontier'], style:[]},
     {id: 'gogomoa', name: 'Gogomoa', image: 'images/MH/Frontier/gogomoa.png', game:['frontier'], style:[]},
     {id: 'dyaragaua', name: 'Dyaragaua', image: 'images/MH/Frontier/dyuragaua.png', game:['frontier'], style:[]},
@@ -546,10 +564,9 @@ var items = [
     {id: 'hyujikiki', name: 'Hyujikiki', image: 'images/MH/Frontier/hyujikiki.png', game:['frontier'], style:[]},
     {id: 'midogaron', name: 'Midogaron', image: 'images/MH/Frontier/midogaron.png', game:['frontier'], style:[]},
     {id: 'giaorugu', name: 'Giaorugu', image: 'images/MH/Frontier/giaorugu.png', game:['frontier'], style:[]},
-    //monsters below this line have low quality icons
+  //monsters below this line have low quality icons
     {id: 'miru', name: 'Mi Ru', image: 'images/MH/Frontier/miru.png', game:['frontier'], style:[]},
-
-    //frontier elders
+  //frontier elders
     {id: 'rukodiora', name: 'Rukodiora', image: 'images/MH/Frontier Elders/rukodiora.png', game:['frontier'], style:[]},
     {id: 'rebidiora', name: 'Rebidiora', image: 'images/MH/Frontier Elders/rebidiora.png', game:['frontier'], style:[]},
     {id: 'disufiroa', name: 'Disufiroa', image: 'images/MH/Frontier Elders/disufiroa.png', game:['frontier'], style:[]},
@@ -563,13 +580,11 @@ var items = [
     {id: 'shantien', name: 'Shantien', image: 'images/MH/Frontier Elders/shantien.png', game:['frontier'], style:[]},
     {id: 'toatesu', name: 'Toa Tesukatora', image: 'images/MH/Frontier Elders/toatesukatora.png', game:['frontier'], style:[]},
     {id: 'yamakurai', name: 'Yama Kurai', image: 'images/MH/Frontier Elders/yamakurai.png', game:['frontier'], style:[]},
-
-    //stories exclusives
+  //stories exclusives
     {id: 'versa', name: 'Versa Pietru', image: 'images/MH/Elder Dragon/versapietru.png', game:['stories'], style:[]},
     {id: 'makili', name: 'Makili Pietru', image: 'images/MH/Elder Dragon/makilipietru.png', game:['stories'], style:[]},
     {id: 'oltura', name: 'Oltura', image: 'images/MH/Elder Dragon/oltura.png', game:['stories2'], style:[]},
-
-    //Musou
+  //Musou
     {id: 'starving', name: 'Starving Deviljho', image: 'images/MH/Musou/starving_deviljho.png', game:['frontier'], style:['musou']},
     {id: 'mysterious', name: 'Mysterious Mi Ru', image: 'images/MH/Musou/mysterious_miru.png', game:['frontier'], style:['musou']},
     {id: 'blinking', name: 'Blinking Nargacuga', image: 'images/MH/Musou/blinking_nargacuga.png', game:['frontier'], style:['musou']},
@@ -580,8 +595,7 @@ var items = [
     {id: 'ruler', name: 'Ruler Guanzorumu', image: 'images/MH/Musou/ruler_guanzorumu.png', game:['frontier'], style:['musou']},
     {id: 'bombardier', name: 'Bombardier Bogabadorumu', image: 'images/MH/Musou/bombardier_bogabadorumu.png', game:['frontier'], style:['musou']},
     {id: 'sparkling', name: 'Sparkling Zerueusu', image: 'images/MH/Musou/sparkling_zerueusu.png', game:['frontier'], style:['musou']},
-
-    //apex/risen
+  //apex/risen
     {id: 'apexarz', name: 'Apex Arzuros', image: 'images/MH/Apex-Risen/MHRise-Apex_Arzuros_Icon.png', game:['risebreak'], style:['apex']},
     {id: 'apexrathi', name: 'Apex Rathian', image: 'images/MH/Apex-Risen/MHRise-Apex_Rathian_Icon.png', game:['risebreak'], style:['apex']},
     {id: 'apexmizu', name: 'Apex Mizutsune', image: 'images/MH/Apex-Risen/MHRise-Apex_Mizutsune_Icon.png', game:['risebreak'], style:['apex']},
@@ -600,7 +614,7 @@ var myPicker = new picker.Picker({
     localStorageKey: 'picker-state',
     defaultSettings: {
         games: ['frontier', 'fu', 'tri', '3u', '4u', 'gu', 'worldborne', 'risebreak', 'wilds'],
-        styles: ['subspecies', 'deviant', 'apex', 'musou'],
+        styles: ['subspecies', 'deviant', 'apex', 'musou', 'guardian'],
     },
     shouldIncludeItem: function(item, settings) {
         //include all monsters by default
